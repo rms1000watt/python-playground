@@ -18,18 +18,23 @@ print("\nVector Operations")
 row1 = np.array([[3,4,1]])
 row2 = np.array([[4,-4,4]])
 
+# Add vectors
 out = np.add(row1, row2)
 print(out)
 
+# Subtract vectors
 out = np.subtract(row1, row2)
 print(out)
 
+# Multiply vectors
 out = np.multiply(row1, row2)
 print(out)
 
+# Divide vectors
 out = np.divide(row1, row2)
 print(out)
 
+# Dot product of vectors
 out = np.dot(row1[0], row2[0])
 print(out)
 
@@ -37,11 +42,14 @@ print("\nMatrix Operations")
 mat1 = np.matrix([[3,1,5],[-4,1,2]]) # 2x3
 mat2 = np.matrix([[3,2],[-5,0],[4,1]]) # 3x2
 
+# Transpose
 print(mat1.T)
 
+# Add matrices
 out = np.add(mat1, mat2.T)
 print(out)
 
+# Multiply matrices
 out = np.matmul(mat1, mat2)
 print(out)
 
