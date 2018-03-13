@@ -66,6 +66,22 @@ print(out)
 out = np.maximum(0, row2)
 print(out)
 
+# Mean of columns in mat (each dimension, preferred)
+out = np.mean(mat1, axis=0)
+print(out)
+
+# Mean of rows in mat
+out = np.mean(mat1, axis=1)
+print(out)
+
+# Std dev of columns in mat (each dimension, preferred)
+out = np.std(mat1, axis=0)
+print(out)
+
+# Std dev of rows in mat
+out = np.std(mat1, axis=1)
+print(out)
+
 print("\nInitilizations")
 # Zeros
 out = np.zeros((2,3))
