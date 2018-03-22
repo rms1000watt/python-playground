@@ -17,7 +17,6 @@ def loadCIFAR10():
       out = pickle.load(f, encoding="latin1")
       print(out.keys())
       data.extend(out["data"])
-      # labels.extend(out["labels"])
       filenames.extend(out["filenames"])
       global labels
       for label in out["labels"]:
@@ -31,16 +30,12 @@ def main():
   print(labels[0:3])
   print(filenames[0:3])
 
-  print(len(labels))
-  print(labels[0])
-  exit()
+  # (50, 3072)
+  d = np.mat(data[0:50])
 
-  # (3072, 50)
-  d = np.mat(data[0:50]).T
-  
   # Get Bias
   b = np.mean(d, axis=0)
-
+  
   # Zero center data
   d = np.subtract(d, b)
 
@@ -48,10 +43,12 @@ def main():
   # d = np.divide(d, np.std(d, axis=0))
 
   # Create small, random weights
-  W1 = np.random.randn(10, 3072) * np.sqrt(2./len(d))
+  W1 = np.random.randn(3072, 10) * np.sqrt(2./len(d))
 
   # Multiply by weights
-  H1 = np.matmul(W1, d)
+  H1 = np.matmul(d, W1)
+  print(np.shape(H1))
+  exit()
 
   # Rectify
   H1 = np.maximum(0, H1)
