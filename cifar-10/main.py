@@ -24,39 +24,53 @@ def loadCIFAR10():
         z[label] = 1
         labels.append(z)
 
+def dReLU(x):
+  return np.minimum((np.maximum(0, x) * 1e9), 1)
+
 def main():
   loadCIFAR10()
   print(data[0:3])
   print(labels[0:3])
   print(filenames[0:3])
 
-  # (50, 3072)
-  d = np.mat(data[0:50])
+  # Output Labels (50, 10)
+  y = np.mat(labels[0:50])
+
+  # Input Images (50, 3072)
+  x = np.mat(data[0:50])
 
   # Get Bias
-  b = np.mean(d, axis=0)
+  bias = np.mean(x, axis=0)
   
   # Zero center data
-  d = np.subtract(d, b)
+  x = np.subtract(x, bias)
 
   # Normalize data
   # d = np.divide(d, np.std(d, axis=0))
 
   # Create small, random weights
-  W1 = np.random.randn(3072, 10) * np.sqrt(2./len(d))
+  W1 = np.random.randn(3072, 10) * np.sqrt(2./len(x))
 
-  # Multiply by weights
-  H1 = np.matmul(d, W1)
-  print(np.shape(H1))
-  exit()
+  for i in range(10):
+    # Multiply by weights
+    H1 = np.matmul(x, W1)
 
-  # Rectify
-  H1 = np.maximum(0, H1)
+    # Rectify
+    H1 = np.maximum(0, H1)
 
-  # Create mask (inverted dropout)
-  M = (np.random.rand(*H1.shape) < p) / p
-  H1 = np.multiply(H1, M)
-  print(H1)
+    # Create mask (inverted dropout)
+    # M = (np.random.rand(*H1.shape) < p) / p
+    # H1 = np.multiply(H1, M)
+
+    # Find Error
+    err = np.subtract(y, H1)
+
+    # Calculate delta
+    delta = err * dReLU(H1)
+    W1 += np.dot(H1, delta)
+
+    print(delta)
+    exit()
   
 
 
