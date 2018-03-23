@@ -23,31 +23,38 @@ def loadCIFAR10():
 def sig(x): return 1/(1+np.exp(-x))
 def dSig(x): return x*(1-x)
 
+def relu(x): return np.maximum(0, x)
+def drelu(x): return np.minimum((np.maximum(0, x)), 1)
+
+def softmax(x): return np.exp(x)/np.sum(np.exp(x))
+
 def main():
   loadCIFAR10()
 
   # Output Labels (50, 10)
-  y = labels[0:50]
+  y = labels[0:1000]
 
   # Input Images (50, 3072)
-  x = np.array(data[0:50])
+  x = data[0:1000]
 
-  # Center on 0
+  # Center on 0 (max pixel value is 255)
   x = np.subtract(x, 128.)
 
-  # Normalize data
+  # Normalize data (max centered value is 128)
   x = np.divide(x, 128.)
 
   # Create small, random weights
-  W1 = (2.*(np.random.rand(3072, 10)) - 1.) * 1e-2
+  W1 = (2.*(np.random.rand(3072, 10)) - 1.) * 1e-5
+
+  print("W1:", W1)
   
-  for i in range(10000):
+  for i in range(1000):
     # Multiply by weights
     H1 = np.matmul(x, W1)
 
     # Rectify
-    # H1 = np.maximum(0, H1)
     H1 = sig(H1)
+    # H1 = relu(H1)
 
     # Create mask (inverted dropout)
     # M = (np.random.rand(*H1.shape) < p) / p
@@ -58,6 +65,7 @@ def main():
 
     # Calculate delta
     delta = err * dSig(H1) * 1e-2
+    # delta = err * drelu(H1) * 1e-5
 
     W1 += np.dot(x.T, delta)
   
@@ -68,13 +76,14 @@ def main():
   print("final:", H1[0])
   print("actual:", y[0])
 
-  print("final:", H1[1])
-  print("actual:", y[1])
+  print("final:", H1[100])
+  print("actual:", y[100])
 
-  print("final:", H1[2])
-  print("actual:", y[2])
-
-  print("W1:", W1)
+  ind = 0
+  out = np.matmul(np.divide(np.subtract(data[ind], 128), 128), W1)
+  print(out)
+  print(softmax(out))
+  print(labels[ind])
 
 
 if __name__ == '__main__':
