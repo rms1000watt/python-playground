@@ -44,7 +44,7 @@ def main():
   x = np.divide(x, 128.)
 
   # Create small, random weights
-  W1 = (2.*(np.random.rand(3072, 10)) - 1.) * 1e-5
+  W1 = (2.*(np.random.rand(3072, 10)) - 1.) * 1e-2
 
   print("W1:", W1)
   
@@ -84,6 +84,8 @@ def main():
   print(out)
   print(softmax(out))
   print(labels[ind])
+
+  # np.isclose()
 
 
 if __name__ == '__main__':
